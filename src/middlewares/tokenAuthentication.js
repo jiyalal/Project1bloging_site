@@ -1,6 +1,16 @@
 const jwt = require("jsonwebtoken");
+const userModel = require("../models/userModel");
+
 
 const tokenAuthenticator = async function (req, res, next) {
+// let userId = req.params.userId;
+// let userDetails = await userModel.findById(userId);
+// if (!userDetails) {
+//     return res.send({
+//       status: false,
+//       msg: "No such user exists"
+//     })}
+
   let token = req.headers["x-Auth-token"];
   if (!token) {
     token = req.headers["x-auth-token"];
@@ -17,9 +27,15 @@ const tokenAuthenticator = async function (req, res, next) {
   if (!decodedToken) {
     return res.send({
       status: false,
-      msg: "token is invalid",
+      msg: "token is invalid"
     });
-  } else {
+  }
+
+  let userToBeModified = decodedToken.userId
+  let userIdEntered = req.params.userId
+  if (userToBeModified != userIdEntered) {
+    res.send("You don't have access")
+  }else {
     next();
   }
 };

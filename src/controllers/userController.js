@@ -22,24 +22,25 @@ const loginUser = async function (req, res) {
     emailId: userName,
     password: password
   });
-  if (!user)
-    {return res.send({
+  if (!user) {
+    return res.send({
       status: false,
       msg: "username or the password is not corerct",
-    });}
-    else{
-  let token = jwt.sign({
-      userId: user._id.toString(),
-      batch: "radon",
-      organisation: "FunctionUp"
-    },
-    "functionup-radon-1"
-  );
-  res.setHeader("x-auth-token", token);
-  res.send({
-    status: true,
-    token: token
-  });}
+    });
+  } else {
+    let token = jwt.sign({
+        userId: user._id.toString(),
+        batch: "radon",
+        organisation: "FunctionUp"
+      },
+      "functionup-radon-1"
+    );
+    res.setHeader("x-auth-token", token);
+    res.send({
+      status: true,
+      token: token
+    });
+  }
 };
 
 
