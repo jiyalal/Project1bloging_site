@@ -37,36 +37,7 @@ const updateBlog = async function (req, res) {
     }
 
 }
-// << ========================================================================================>>
-
-const deleteBlogId = async function(req,res){
-
-    try{
-        const blogId =  req.params.blogId
-        const validId= await blogModel.findByid(blogId)
-        if (!validId){
-            return res.status(400).send({status:false,msg: "Blog Id is invalid"})
-        }
-
-        const authorIdFromParam = req.params.authorId
-        const authorIdFromBlog = validId.authorId.toString()
-        console.log(authorIdFromBlog,authorIdFromParam)
-        if (authorIdFromParam !== authorIdFromBlog){
-            return res.status(401).send({ status : false, msg:"This is not your blog ,you can not delete it."})
-        }
-
-        const deleteDetails = await blogModel.findOneAndUpdate({_id : blogId},{isDeleted : true, deleteAt :new Date()},
-         {new : true})
-         res.status(201).send({status:true, data:deleteDetails})
-
-    }
-    catch(err){
-        console.log(err)
-        res.status(500).send({status:false, msg:err.message})
-    }
 
 
-}
 module.exports.createBlog = createBlog
 module.exports.updateBlog = updateBlog
-module.exports.deleteBlogId = deleteBlogId

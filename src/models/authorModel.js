@@ -19,14 +19,16 @@ const authorSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true
-        
+
     },
     password: {
         type: String,
         required: true
     }
-    
-},{ timestamps: true })
+
+}, {
+    timestamps: true
+})
 
 
 

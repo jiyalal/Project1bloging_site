@@ -20,14 +20,12 @@ const blogSchema = new mongoose.Schema({
 
     category: {
         type: String,
-        // enum: ["technology", "entertainment", "life style", "food", "fashion"],
         required: true
     },
 
-    subcategory: { 
-            type: [String],
-                    //   enum: ["technology", "web development", "mobile development", "AI", "ML"],
-        required: true 
+    subcategory: {
+        type: [String],
+        required: true
     },
 
     deletedAt: {
@@ -46,6 +44,8 @@ const blogSchema = new mongoose.Schema({
         default: false
     }
 
-}, { timestamps: true })
+}, {
+    timestamps: true
+})
 
 module.exports = mongoose.model('blogFresh', blogSchema)
