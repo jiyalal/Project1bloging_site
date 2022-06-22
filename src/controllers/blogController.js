@@ -31,8 +31,8 @@ const updateBlog = async function (req, res) {
     }
     if(searchBlog.isDeleted == false){
         let publishDate = moment().format('YYYY-MM-DD h:mm:ss')
-        let updateData= await blogModel.findByIdAndUpdate(enteredBlogId,
-                            { $addToSet: { tags: req.body.tags, subcategory: req.body.subcategory}, publishedAt: publishDate} ,{new: true})
+        let updateData= await blogModel.findByIdAndUpdate(enteredBlogId, {title: req.body.title, body: req.body.body,
+                             $addToSet: { tags: req.body.tags, subcategory: req.body.subcategory}, publishedAt: publishDate} ,{new: true})
         res.status(200).send({status:true, data: updateData})
     }
 
