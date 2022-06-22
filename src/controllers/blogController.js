@@ -7,10 +7,12 @@ const createBlog= async function (req, res) {
     try{
     let enteredAuthorId = req.body.authorId
     searchAuthId = await authorModel.findById(enteredAuthorId)
-    if (searchAuthId == undefined){
+    if (!searchAuthId){
         return res.status(404).send({msg: "Author is not registered. Please enter a valid authorId"})
     }else{
-        let authorData= await blogModel.create(req.body)
+        let body= req.body
+        body.isPublished = true
+        let authorData= await blogModel.create(body)
         return res.status(201).send({status:true, data: authorData})
     }
     }
@@ -50,6 +52,7 @@ const updateBlog = async function (req, res) {
     try{
     let enteredBlogId = req.params.blogId
     searchBlog = await blogModel.findById(enteredBlogId)
+    console.log(searchBlog)
     if (!searchBlog){
         return res.status(404).send({status:false, msg: "Please enter a valid blog Id"})
     }if(searchBlog.isDeleted== true){
@@ -83,7 +86,9 @@ const deleteBlogId = async function(req,res){
             return res.status(404).send({status:false, msg: "Blog Document doesnot exist. Already deleted"})
         }
         if(validId.isDeleted== false){
-        await blogModel.findOneAndUpdate({_id : blogId},{isDeleted : true, deleteAt :new Date()},
+        let deleteDate = moment().format('YYYY-MM-DD h:mm:ss')
+        console.log(deleteDate)
+        await blogModel.findOneAndUpdate({_id : blogId},{isDeleted : true, deletedAt :deleteDate },
          {new : true})
          return res.status(201).send({status:true, msg: "Blog successfully deleted"})
         }
@@ -106,12 +111,13 @@ const deleteBlogIdAndQuery = async function(req,res){
             return res.status(400).send({status:false, msg:'Bad Request. Please enter valid condition'})
         }
         else{
-        let updateData = await blogModel.updateMany(queries, {$set: {isDeleted : false}},{new: true}).populate("authorId")
-        if(updateData.matchedCount==0){
-            return res.status(404).send({status:false, msg: "Blog Document doesnot exist. Already deleted"})
-        }else{
+        let updateData = await blogModel.updateMany(queries, {$set: {isDeleted : true}},{new: true}).populate("authorId")
+        console.log(updateData)
+        // if(updateData.matchedCount==0){
+        //     return res.status(404).send({status:false, msg: "Blog Document doesnot exist. Already deleted"})
+        // }else{
             return res.status(201).send({status:true,msg: "Blog successfully deleted", data: updateData})
-        }
+        // }
     }
 
     }
