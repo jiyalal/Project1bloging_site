@@ -21,13 +21,7 @@ const authorSchema = new mongoose.Schema({
        
         type:String,
         required : true,
-        unique : true,
-        // trim: true,
-        // validate:{
-        // validator: validator.isEmail,
-        // message: '{VALUE} is not a valid email',
-        // }
-
+        unique : true
     },
     password: {
         type: String,
