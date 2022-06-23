@@ -105,7 +105,7 @@ const deleteBlogId = async function(req,res){
         if(!ObjectId.isValid(enteredBlogId)){
         return res.status(400).send({ status: false, msg: "BlogId invalid" })
         }
-        const validId= await blogModel.findById(blogId)
+        const validId= await blogModel.findById(enteredblogId)
         if (!validId){  //check if document is present in DB
             return res.status(400).send({status:false,msg: "Blog Id is invalid"})
         }
@@ -114,7 +114,7 @@ const deleteBlogId = async function(req,res){
         }
         if(validId.isDeleted== false){  //if item is not deleted or is present in DB
         let deleteDate = moment().format('YYYY-MM-DD h:mm:ss')
-        await blogModel.findOneAndUpdate({_id : blogId},{isDeleted : true, deletedAt :deleteDate },
+        await blogModel.findOneAndUpdate({_id : enteredBlogId},{isDeleted : true, deletedAt :deleteDate },
          {new : true})
          return res.status(201).send({status:true, msg: "Blog successfully deleted"})
         }
@@ -135,9 +135,17 @@ const deleteBlogIdAndQuery = async function(req,res){
     try{
         let data = req.query
         let authorId = data.authorId
+        // let authorisedId = decodedToken.userId
+        let authorisedId= "62b1a4d8efa16e2e1c52b57c" 
+        
         if(("authorId" in data)&&(!ObjectId.isValid(authorId))){
             return res.status(400).send({ status: false, msg: "AuthorId invalid" })
         }
+        if(("authorId" in data)&&(authorId != authorisedId)){
+            return res.status(403).send({status:false, msg:'Not Authorised. You cannot delete this'})
+        }
+        data.authorId = authorisedId
+
         if(Object.keys(data).length === 0){   //checking if entered filter is empty. If empty
             return res.status(400).send({status:false, msg:'Bad Request. Please enter valid condition'})
         }
