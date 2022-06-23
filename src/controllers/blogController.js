@@ -8,19 +8,24 @@ const ObjectId = require('mongoose').Types.ObjectId
 const createBlog= async function (req, res) {
     try{
         let body = req.body
-        let enteredAuthorId = body.authorId
-        let authorId = data.authorId
-        if(("authorId" in body)&&(!ObjectId.isValid(authorId))){
-             return res.status(400).send({ status: false, msg: "AuthorId invalid" })
-        }
-        searchAuthId = await authorModel.findById(enteredAuthorId)
-        if (!searchAuthId){
-            return res.status(404).send({msg: "AuthorId not found"})
-        }else{
+        // let enteredAuthorId = body.authorId
+        // let authorId = body.authorId
+        // if(!(("title" in body) && ("body" in body) && ("category" in body) && ("authorId" in body))){
+        //     return res.status(400).send({status: false, message: "All field is mandatory" })
+        // }
+        // if((body.title.length == 0) || (body.body.length == 0)|| (body.category.length == 0)|| (body.authorId.length == 0)){
+        //     return res.status(400).send("This fields are required. Cannot be empty")
+        // }
+        // if(!ObjectId.isValid(authorId)){
+        //      return res.status(400).send({ status: false, msg: "AuthorId invalid" })
+        // }
+        // searchAuthId = await authorModel.findById(enteredAuthorId)
+        // if (!searchAuthId){
+        //     return res.status(404).send({msg: "AuthorId not found"})
+        // }else{
         body.isPublished = true
         let authorData= await blogModel.create(body)
         return res.status(201).send({status:true, data: authorData})
-    }
     }
     catch(err){
         return res.status(500).send({msg:"Serverside Errors. Please try again later", error: err.message})
