@@ -1,11 +1,11 @@
-
 const authorModel = require("../models/authorModel")
 
 
 const createAuthor = async function (req, res) {
-
+   
     try{
-    let data = req.body  
+    let data = req.body 
+    // Create a new document in Author model
     let savedData = await authorModel.create(data)
     res.status(201).send({status:true, data: savedData})
     }

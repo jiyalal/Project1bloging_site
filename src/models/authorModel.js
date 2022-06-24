@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+// const ObjectId = mongoose.Schema.Types.ObjectId
+// const { ObjectId } = require('mongoose');
 
 const authorSchema = new mongoose.Schema({
 
     fname: {
         type: String,
-        required: true
+        required: true,
     },
     lname: {
         type: String,
@@ -13,26 +14,21 @@ const authorSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        enum: ["Mr", "Mrs", "Miss"],
-        required: true
+        required: true,
+        enum: ["Mr", "Mrs", "Miss"]
     },
-
     email: {
        
         type:String,
         required : true,
         unique : true,
+        trim: true
     },
     password: {
-        type: String,
-        required: true
+        required: true,
+        type: String
     }
-
-}, {
-    timestamps: true
-})
-
-
-
+    
+},{ timestamps: true })
 
 module.exports = mongoose.model('author', authorSchema)
