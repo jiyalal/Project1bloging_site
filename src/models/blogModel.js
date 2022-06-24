@@ -1,6 +1,6 @@
-const { ObjectId } = require('mongoose');
 const mongoose = require('mongoose');
-// const ObjectId = mongoose.Schema.Types.ObjectId
+const ObjectId = mongoose.Schema.Types.ObjectId
+
 
 const blogSchema = new mongoose.Schema({
 
@@ -45,5 +45,7 @@ const blogSchema = new mongoose.Schema({
     }
 
 }, { timestamps: true })
+
+
 
 module.exports = mongoose.model('blogFresh', blogSchema)

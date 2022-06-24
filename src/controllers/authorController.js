@@ -5,10 +5,12 @@ const createAuthor = async function (req, res) {
    
     try{
     let data = req.body 
+
     // Create a new document in Author model
     let savedData = await authorModel.create(data)
     res.status(201).send({status:true, data: savedData})
     }
+    
     catch(err){
         res.status(500).send({msg:"Serverside Errors. Please try again later", error: err.message})
 

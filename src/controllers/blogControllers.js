@@ -4,14 +4,18 @@ const moment = require('moment')
 const ObjectId = require('mongoose').Types.ObjectId
 const jwt = require("jsonwebtoken")
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 const createBlog = async function (req, res) {
     try {
+
         // storing the data from body in object format in a variable
         let body = req.body 
+
         // adding a new kew value pair {idPublished:true} to the enterd object because on new blog creation it should get published
         body.isPublished = true
+        
         // creating a new document using the conditions inside the 'body' object
         let authorData = await blogModel.create(body)
         return res.status(201).send({ status: true, data: authorData })
@@ -23,7 +27,7 @@ const createBlog = async function (req, res) {
 }
 
 
-
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
@@ -38,7 +42,7 @@ const getBlogs = async function (req, res) {
             return res.status(400).send({ status: false, msg: "AuthorId invalid" })
         }
         // adding two new kew value pair {isDelete:false, idPublished:true} to the enterd object (data) 
-        //because the plog requested by user shouldnot be deleted and should be get created by some author
+        //because the blog requested by user shouldnot be deleted and should be get created by some author
         data.isDeleted = false
         data.isPublished = true
         // finding the blog through the enterd condition and newly updated condition
@@ -60,6 +64,7 @@ const getBlogs = async function (req, res) {
 
 
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
@@ -85,6 +90,7 @@ const updateBlog = async function (req, res) {
 
 
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
@@ -107,6 +113,7 @@ const deleteBlogId = async function (req, res) {
 }
 
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
@@ -128,8 +135,6 @@ const deleteBlogIdAndQuery = async function(req,res){
         }else{
             return res.status(201).send({status:true,msg: "Blog successfully deleted", data: updateData})
         }
-    
-
     }
     catch(err){
         console.log(err)
@@ -138,6 +143,7 @@ const deleteBlogIdAndQuery = async function(req,res){
 }
 
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 

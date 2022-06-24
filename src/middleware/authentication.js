@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken")
 
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
 const authentication = async function (req, res, next) {
 
     try {
@@ -17,10 +20,10 @@ const authentication = async function (req, res, next) {
 
         // Checking if the token is creted using the secret key provided and decode it.
         let decodedToken = jwt.verify(token, "bidipta-jiyalal-unmesh");
-        // let abc = decodedToken.authorId
+        
         // if cannot verify, will return error
-        // if (!abc) 
-        //     return res.status(401).send({ status: false, msg: "Token is invalid" });
+        if (!decodedToken) 
+            return res.status(401).send({ status: false, msg: "Token is invalid" });
 
 
         next()
@@ -31,6 +34,10 @@ const authentication = async function (req, res, next) {
     }
 
 }
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 
 
 module.exports.authentication = authentication

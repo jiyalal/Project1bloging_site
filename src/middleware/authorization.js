@@ -3,6 +3,7 @@ const blogModel = require("../models/blogModel")
 const ObjectId = require('mongoose').Types.ObjectId
 const jwt = require("jsonwebtoken")
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 const authCreateBlog = async function (req, res, next) {
@@ -11,12 +12,14 @@ const authCreateBlog = async function (req, res, next) {
         // check if token key is present in the header/cookies
         let token = req.headers["x-Api-key"];  
         if (!token) token = req.headers["x-api-key"]; //convert key to small case because it will only accept smallcase
+
         // Checking if the token is creted using the secret key provided and decode it.
         let decodedToken = jwt.verify(token, "bidipta-jiyalal-unmesh"); 
 
         //---------------Authorisation
         let userToBeModified = req.body.authorId //storing the authorid entered in the request/postman body in a variable
         let userLoggedIn = decodedToken.userId // storing the authorid from decoded token in a variable
+
         //userId comparision to check if the logged-in user is requesting for their own data.
         if (userToBeModified != userLoggedIn) //compared if enterd authorid and decoded token authorid is same or not
         return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
@@ -32,14 +35,19 @@ const authCreateBlog = async function (req, res, next) {
 
 
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
 
 const authUpdateDelete = async function (req, res, next) {
 
     try {
         //-------token check--------
+
         // check if token key is present in the header/cookies
         let token = req.headers["x-Api-key"];
         if (!token) token = req.headers["x-api-key"]; //convert key to small case because it will only accept smallcase
+
         // Checking if the token is creted using the secret key provided and decode it.
         let decodedToken = jwt.verify(token, "bidipta-jiyalal-unmesh");
 
@@ -48,18 +56,23 @@ const authUpdateDelete = async function (req, res, next) {
         if (!ObjectId.isValid(enteredBlogId)) {
             return res.status(400).send({ status: false, msg: "BlogId invalid" })
         }
+
         // checking if the author trying to modify the documents belongs to his or not 
         const searchBlog = await blogModel.findById(enteredBlogId)
         if (!searchBlog) {  //check if document is present in DB, iif not found anything return error
             return res.status(400).send({ status: false, msg: "Blog Id is invalid" })
         }
+
         if (searchBlog.isDeleted == true) {  //check if the document is already deleted
             return res.status(404).send({ status: false, msg: "Blog Document doesnot exist. Already deleted" })
         }
+
         let userToBeModified = searchBlog.authorId //storing the authorid from the blog document found by making the db call
         let userLoggedIn = decodedToken.userId // storing the authorid from decoded token in a variable
-        if (userToBeModified != userLoggedIn) //comparing if authorid found from searched ddb blog document and decoded token authorid is same or not
-        return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
+
+        if (userToBeModified != userLoggedIn) {//comparing if authorid found from searched ddb blog document and decoded token authorid is same or not
+            return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
+        }
 
         next()
     }
@@ -72,13 +85,19 @@ const authUpdateDelete = async function (req, res, next) {
 
 
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
 const authDeleteByParams = async function (req, res, next) {
 
     try {
 
-         let token = req.headers["x-Api-key"];
+        let token = req.headers["x-Api-key"];
         if (!token) token = req.headers["x-api-key"];
+
         let decodedToken = jwt.verify(token, "bidipta-jiyalal-unmesh");
+        
         let data = req.query
         let authorId = data.authorId
         let userLoggedIn = decodedToken.userId
@@ -102,6 +121,7 @@ const authDeleteByParams = async function (req, res, next) {
 
 }
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 module.exports.authCreateBlog = authCreateBlog
