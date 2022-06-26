@@ -14,7 +14,7 @@ const authentication = async function (req, res, next) {
 
         //If no token is present in the request header return error
         if (!token) 
-        return res.status(400).send({ status: false, msg: "Please login again to generate the token" });
+            return res.status(400).send({ status: false, msg: "Bad Request. Please login again to generate the token" });
 
         //>>>>>>>>>>>>>>>>Authentication
 
@@ -23,7 +23,7 @@ const authentication = async function (req, res, next) {
         
         // if cannot verify, will return error
         if (!decodedToken) 
-            return res.status(401).send({ status: false, msg: "Token is invalid" });
+            return res.status(401).send({ status: false, msg: "Authentication Missing. Login is required. Token is invalid" });
 
 
         next()

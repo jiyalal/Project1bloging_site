@@ -4,7 +4,7 @@ const authorModel = require("../models/authorModel")
 const createAuthor = async function (req, res) {
    
     try{
-    let data = req.body 
+    let data = req.body  //take the data from the request body
 
     // Create a new document in Author model
     let savedData = await authorModel.create(data)

@@ -8,7 +8,6 @@ const jwt = require("jsonwebtoken")
 const loginUser = async function (req, res) {
     
     let user = await authorModel.findOne(req.body);
-    console.log(user)
     if (!user)
       return res.status(400).send({
         status: false,

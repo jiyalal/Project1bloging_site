@@ -39,7 +39,7 @@ const getBlogs = async function (req, res) {
 
         //check if authorId key is enterd in filter and if its is a valid objectid
         if (("authorId" in data) && (!ObjectId.isValid(authorId))) {
-            return res.status(400).send({ status: false, msg: "AuthorId invalid" })
+            return res.status(400).send({ status: false, msg: "Bad Request. AuthorId invalid" })
         }
         // adding two new kew value pair {isDelete:false, idPublished:true} to the enterd object (data) 
         //because the blog requested by user shouldnot be deleted and should be get created by some author
@@ -49,7 +49,7 @@ const getBlogs = async function (req, res) {
         let savedBlogs = await blogModel.find(data).populate("authorId") //find return array of object
         // check if condition entered in the postman/filter doesnot match any document
         if (savedBlogs.length == 0) {
-            return res.status(404).send({ status: false, msg: "No data exist" })
+            return res.status(404).send({ status: false, msg: "Resource Not found. Please try another filter" })
         } 
         // if data found in DB
         return res.status(200).send({ status: true, data: savedBlogs })
@@ -104,7 +104,7 @@ const deleteBlogId = async function (req, res) {
             //DB call for users condition
             await blogModel.findOneAndUpdate({ _id: enteredBlogId }, { isDeleted: true, deletedAt: deleteDate },
                 { new: true })
-            return res.status(201).send({ status: true, msg: "Blog successfully deleted" })
+            return res.status(200).send({ status: true, msg: "Blog successfully deleted" })
     }
     catch (err) {
         console.log(err)
@@ -131,7 +131,7 @@ const deleteBlogIdAndQuery = async function(req,res){
 
         let updateData = await blogModel.updateMany(data, {$set: {isDeleted : true}})
         if(updateData.matchedCount==0){  //if combination of filtered documents doesnot exist
-            return res.status(404).send({status:false, msg: "Blog Document doesnot exist for this filter"})
+            return res.status(404).send({ status: false, msg: "Page/Resource not found. Blog Document doesnot exist for this filter"})
         }else{
             return res.status(201).send({status:true,msg: "Blog successfully deleted", data: updateData})
         }
