@@ -19,8 +19,8 @@ const blogCreateValidator = async function (req, res, next) {
         }
 
         // check if enterd body length is atleast 5 character
-        if((body.body.trim().length) < 6){
-            return res.status(400).send({ status: false, msg: "Bad Request. Body must have some character"})
+        if((body.body.trim().length) < 4){
+            return res.status(400).send({ status: false, msg: "Bad Request. Body must have some words"})
         }
 
         // check if entered body, category and authorId is blank or empty

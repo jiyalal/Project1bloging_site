@@ -127,6 +127,7 @@ const deleteBlogIdAndQuery = async function(req,res){
         let decodedToken = jwt.verify(token, "bidipta-jiyalal-unmesh");
          
         let userLoggedIn = decodedToken.userId
+        //this will add an key-value pair {authorId: userLoggedIn} to the query data
         data.authorId = userLoggedIn
 
         let updateData = await blogModel.updateMany(data, {$set: {isDeleted : true}})

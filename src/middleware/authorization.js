@@ -63,16 +63,16 @@ const authUpdateDelete = async function (req, res, next) {
             return res.status(404).send({ status: false, msg: "Page/Resource not found. Enter valid blog id" })
         }
 
-        if (searchBlog.isDeleted == true) {  //check if the document is already deleted
-            return res.status(404).send({ status: false, msg: "Page/Resource not found. Blog Document doesnot exist. Already deleted" })
-        }
-
         let userToBeModified = searchBlog.authorId //storing the authorid from the blog document found by making the db call
         let userLoggedIn = decodedToken.userId // storing the authorid from decoded token in a variable
 
         if (userToBeModified != userLoggedIn) {//comparing if authorid found from searched ddb blog document and decoded token authorid is same or not
             return res.status(403).send({ status: false, msg: 'Not Authorized. User logged is not allowed to modify the requested users data' })
         }
+        if (searchBlog.isDeleted == true) {  //check if the document is already deleted
+            return res.status(404).send({ status: false, msg: "Page/Resource not found. Blog Document doesnot exist. Already deleted" })
+        }
+
 
         next()
     }
@@ -101,18 +101,20 @@ const authDeleteByParams = async function (req, res, next) {
         let data = req.query
         let authorId = data.authorId
         let userLoggedIn = decodedToken.userId
+
+        //checking if entered filter is empty. If empty instead of deleting all docs, send an error message
+        if (Object.keys(data).length === 0) {
+            return res.status(400).send({ status: false, msg: 'Bad Request. Please enter valid condition' })
+        }
         if(("authorId" in data)&&(!ObjectId.isValid(authorId))){
             return res.status(400).send({ status: false, msg: "Bad Request. AuthorId invalid" })
         }
         if(("authorId" in data)&&(authorId != userLoggedIn)){
             return res.status(403).send({status:false, msg:'Not Authorised. You cannot delete this'})
         }
-        data.authorId = userLoggedIn
+        
+       
 
-        //checking if entered filter is empty. If empty instead of deleting all docs, send an error message
-        if(Object.keys(data).length === 0){   
-            return res.status(400).send({status:false, msg:'Bad Request. Please enter valid condition'})
-        }
         next()
     }
 
