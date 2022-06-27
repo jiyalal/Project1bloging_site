@@ -22,7 +22,7 @@ const loginUser = async function (req, res) {
       "bidipta-jiyalal-unmesh"
     );
     res.setHeader("x-api-key", token);
-    res.send({ status: true, token: token });
+    res.send({ status: true,msg: "Login Successfull", data: token });
   };
 
 

@@ -15,9 +15,9 @@ const login = require("../controllers/loginController")
 
 
 
-router.post("/createAuthor", authorValidator.authorCreateValidator, authorController.createAuthor)
+router.post("/authors", authorValidator.authorCreateValidator, authorController.createAuthor)
 
-router.post("/createblog", authentication.authentication, blogValidator.blogCreateValidator, authorization.authCreateBlog, blogController.createBlog)
+router.post("/blogs", authentication.authentication, blogValidator.blogCreateValidator, authorization.authCreateBlog, blogController.createBlog)
 
 router.get("/blogs",authentication.authentication, blogController.getBlogs)
 
