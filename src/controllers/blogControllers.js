@@ -114,7 +114,7 @@ const deleteBlogId = async function (req, res) {
             let enteredBlogId = req.params.blogId
             let deleteDate = moment().format('YYYY-MM-DD h:mm:ss')  //sets moment.js time when deleted data in future DB call
             //DB call for users condition
-            await blogModel.findOneAndUpdate({ _id: enteredBlogId }, { isDeleted: true, deletedAt: deleteDate },
+            await blogModel.findOneAndUpdate({ _id: enteredBlogId }, { isDeleted: true, deletedAt: new Date() },
                 { new: true })
             return res.status(200).send({ status: true, msg: "Blog successfully deleted" })
     }
@@ -152,7 +152,7 @@ const deleteBlogIdAndQuery = async function(req,res){
             data['subcategory'] = { $all: subCatArr }
         }
 
-        let updateData = await blogModel.updateMany(data, {$set: {isDeleted : true}})
+        let updateData = await blogModel.updateMany(data, {$set: {isDeleted : true, deletedAt : new Date()}})
         if(updateData.matchedCount==0){  //if combination of filtered documents doesnot exist
             return res.status(404).send({ status: false, msg: "Page/Resource not found. Blog Document doesnot exist for this filter"})
         }else{
