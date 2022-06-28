@@ -37,6 +37,18 @@ const getBlogs = async function (req, res) {
         let data = req.query
         let authorId = data.authorId // store enterd authorId in a variable
 
+
+
+        if ("tags" in data) {
+            tagsArr = data.tags.trim().split(",").map(tag => tag.trim())
+            data.tags = { $all: tagsArr }
+        }
+        if ("subcategory" in data) {
+            subCatArr = data.subcategory.trim().split(",").map(sbCat => sbCat.trim())
+            data['subcategory'] = { $all: subCatArr }
+        }
+
+
         //check if authorId key is enterd in filter and if its is a valid objectid
         if (("authorId" in data) && (!ObjectId.isValid(authorId))) {
             return res.status(400).send({ status: false, msg: "Bad Request. AuthorId invalid" })
@@ -52,7 +64,7 @@ const getBlogs = async function (req, res) {
             return res.status(404).send({ status: false, msg: "Resource Not found. Please try another filter" })
         } 
         // if data found in DB
-        return res.status(200).send({ status: true, data: savedBlogs })
+        return res.status(200).send({ status: true,returned_document: savedBlogs.length ,data: savedBlogs })
         
     }
     catch (err) {
@@ -129,6 +141,16 @@ const deleteBlogIdAndQuery = async function(req,res){
         let userLoggedIn = decodedToken.userId
         //this will add an key-value pair {authorId: userLoggedIn} to the query data
         data.authorId = userLoggedIn
+
+
+        if ("tags" in data) {
+            tagsArr = data.tags.trim().split(",").map(tag => tag.trim())
+            data.tags = { $all: tagsArr }
+        }
+        if ("subcategory" in data) {
+            subCatArr = data.subcategory.trim().split(",").map(sbCat => sbCat.trim())
+            data['subcategory'] = { $all: subCatArr }
+        }
 
         let updateData = await blogModel.updateMany(data, {$set: {isDeleted : true}})
         if(updateData.matchedCount==0){  //if combination of filtered documents doesnot exist
